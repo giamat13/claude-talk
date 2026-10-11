@@ -1,0 +1,11 @@
+{
+  "name": "claude-talk",
+  "owner": { "name": "claude-talk contributors" },
+  "plugins": [
+    {
+      "name": "claude-talk",
+      "source": "./",
+      "description": "Let separate Claude Code sessions on one machine talk to each other through named channels."
+    }
+  ]
+}
