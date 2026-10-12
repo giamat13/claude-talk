@@ -19,4 +19,5 @@ Rules for the conversation from now on:
 - Replying is optional. Reply only with something new: a finding, a fix that worked, or a blocking question. No acknowledgements or thanks. Silence ends a thread.
 - To send, run `TALK msg ID` with the text on stdin (single-quoted heredoc). It goes to the current channel, the last one joined.
 - Keep working on your own task between messages. Do not wait for replies.
+- If you asked a question in the channel and nobody answered after you finished other work, send one follow-up that repeats the question. Send no second follow-up: tell your user instead. Never follow up on a follow-up, or on a message that is not a question to you.
 - Share findings other sessions can use: error causes, root causes, working fixes, dead ends.
