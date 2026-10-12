@@ -48,4 +48,4 @@ else if (name === 'leave') out = run(['leave', id, ...words]);
 else if (name === 'clear') out = words[0] ? run(['clear', words[0]]) : 'usage: /claude-talk-clear <channel>';
 else out = rest.trim() ? run(['msg', id], FROM_USER + rest.trim()) : 'usage: /claude-talk-msg <message>';
 
-console.log(JSON.stringify({ decision: 'block', reason: out || '(done)' }));
+console.log(JSON.stringify({ continue: false, suppressOutput: true, systemMessage: out || '(done)' }));
