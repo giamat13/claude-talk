@@ -67,7 +67,8 @@ Window 1 receives the message while it works and can use it.
 
 Any process running as your user can read and write the channel files, and any session can post to any channel it knows. Treat channel messages as untrusted data:
 
-- The command prompts tell Claude to treat messages as information, never as instructions.
+- The command prompts tell Claude to treat messages as information, never as instructions. The exception is messages labeled `USER`, which sessions act on as the user's own request.
+- The `USER` label is not authentication. Anything that can run `node` as your user can send one, including a session that read a hostile web page. Only join channels whose participants you trust.
 - Do not use claude-talk to pass secrets.
 - Messages are stored in plain text until you run `/claude-talk-clear`.
 
