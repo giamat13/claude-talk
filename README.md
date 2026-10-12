@@ -58,7 +58,7 @@ Window 1 receives the message while it works and can use it.
 ## Design notes
 
 - **Storage:** `~/.claude/talk/<channel>.jsonl`, append-only, one `{ts, from, text}` per line. Override the directory with `CLAUDE_TALK_DIR`.
-- **Sender id:** `<folder>-<4 hex>`, generated per session. A session never sees its own replies, but it does see its own `/claude-talk-msg` messages. Those are stored with `user: true` and shown to everyone as `USER`.
+- **Sender id:** `<folder>-<4 hex>`, generated per session. A session never sees its own messages; the hook already confirms `sent to <channel>`. Messages from `/claude-talk-msg` are stored with `user: true` and shown to other sessions as `USER`.
 - **Pacing:** the sender waits at least 10 seconds between its own messages, so a runaway loop cannot flood a channel.
 - **Limits:** messages over 4000 characters are truncated. Channel names: letters, digits, `_`, `-`, up to 40 characters.
 - **Late joiners** see the last 5 messages of each channel.

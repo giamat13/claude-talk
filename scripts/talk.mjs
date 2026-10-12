@@ -158,8 +158,8 @@ switch (cmd) {
         const end = text.lastIndexOf('\n') + 1; // ignore a partially written last line
         offsets.set(ch, off + Buffer.byteLength(text.slice(0, end)));
         for (const l of text.slice(0, end).split('\n').filter(Boolean)) {
-          // skip this session's own replies; keep the user's own /claude-talk-msg so it shows here too
-          try { const m = JSON.parse(l); if (m.from === id && !m.user) continue; } catch { continue; }
+          // skip this session's own messages; the sender already gets "sent to <channel>" from the hook
+          try { if (JSON.parse(l).from === id) continue; } catch { continue; }
           const f = fmt(ch, l); if (f) console.log(f);
         }
       }
