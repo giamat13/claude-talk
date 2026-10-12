@@ -7,7 +7,6 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const TALK = path.join(path.dirname(fileURLToPath(import.meta.url)), 'talk.mjs');
-const FROM_USER = '[FROM THE USER - sent by the human user, not by another Claude session] ';
 
 let input = {};
 try {
@@ -33,9 +32,9 @@ if (name === 'join') {
   process.exit(0);
 }
 
-const run = (args, stdin) => {
+const run = (args, stdin, env = {}) => {
   try {
-    return execFileSync('node', [TALK, ...args], { input: stdin, encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }).trim();
+    return execFileSync('node', [TALK, ...args], { input: stdin, env: { ...process.env, ...env }, encoding: 'utf8', stdio: ['pipe', 'pipe', 'pipe'] }).trim();
   } catch (e) {
     return String(e.stderr || e.message).trim();
   }
@@ -46,6 +45,6 @@ let out;
 if (name === 'list') out = run(['list', id]);
 else if (name === 'leave') out = run(['leave', id, ...words]);
 else if (name === 'clear') out = words[0] ? run(['clear', words[0]]) : 'usage: /claude-talk-clear <channel>';
-else out = rest.trim() ? run(['msg', id], FROM_USER + rest.trim()) : 'usage: /claude-talk-msg <message>';
+else out = rest.trim() ? run(['msg', id], rest.trim(), { CLAUDE_TALK_USER: '1' }) : 'usage: /claude-talk-msg <message>';
 
 console.log(JSON.stringify({ decision: 'block', reason: out || '(done)' }));

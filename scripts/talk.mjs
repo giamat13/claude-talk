@@ -34,7 +34,8 @@ function readLines(file) {
 function fmt(ch, line) {
   let m; try { m = JSON.parse(line); } catch { return null; }
   const t = new Date(m.ts).toLocaleTimeString('en-GB');
-  return `[${ch}] ${m.from} (${t}): ${String(m.text).replace(/\s*\n\s*/g, ' ⏎ ')}`;
+  const who = m.user ? 'USER' : m.from;
+  return `[${ch}] ${who} (${t}): ${String(m.text).replace(/\s*\n\s*/g, ' ⏎ ')}`;
 }
 async function stdinText() {
   if (process.stdin.isTTY) return '';
@@ -94,7 +95,9 @@ switch (cmd) {
     const wait = last + MIN_GAP_MS - Date.now();
     if (wait > 0) await sleep(wait);
     fs.writeFileSync(lastFile, String(Date.now()));
-    fs.appendFileSync(chFile(ch), JSON.stringify({ ts: Date.now(), from: id, text }) + '\n');
+    // CLAUDE_TALK_USER=1 is set only by the UserPromptSubmit hook for /claude-talk-msg
+    const user = process.env.CLAUDE_TALK_USER === '1';
+    fs.appendFileSync(chFile(ch), JSON.stringify({ ts: Date.now(), from: id, text, ...(user && { user: true }) }) + '\n');
     console.log(`sent to ${ch}`);
     break;
   }
@@ -155,7 +158,8 @@ switch (cmd) {
         const end = text.lastIndexOf('\n') + 1; // ignore a partially written last line
         offsets.set(ch, off + Buffer.byteLength(text.slice(0, end)));
         for (const l of text.slice(0, end).split('\n').filter(Boolean)) {
-          try { if (JSON.parse(l).from === id) continue; } catch { continue; }
+          // skip this session's own replies; keep the user's own /claude-talk-msg so it shows here too
+          try { const m = JSON.parse(l); if (m.from === id && !m.user) continue; } catch { continue; }
           const f = fmt(ch, l); if (f) console.log(f);
         }
       }
