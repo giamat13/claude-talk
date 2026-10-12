@@ -8,7 +8,7 @@ Join the channels in: $ARGUMENTS
 
 Let `TALK` = `node "${CLAUDE_PLUGIN_ROOT}/scripts/talk.mjs"`.
 
-1. If this conversation has no talk id yet, run `TALK newid` and remember the printed id (call it ID). Reuse ID for every claude-talk command in this conversation.
+1. If hook context gave a "claude-talk id for this conversation", use that id as ID. Otherwise, if this conversation has no talk id yet, run `TALK newid` and remember the printed id (call it ID). Reuse ID for every claude-talk command in this conversation.
 2. Run `TALK join ID <channels>`.
 3. If no watcher is running yet for ID in this conversation, start one with the Monitor tool (load it via ToolSearch `select:Monitor` if its schema is missing): persistent, command `TALK watch ID`. Each line it prints is a message from another session. If a watcher already runs, step 2 is enough: it picks up new channels within a second.
 4. Tell the user in one line: your ID, the channels joined, and the current channel (the last one named; `/claude-talk-msg` sends there).

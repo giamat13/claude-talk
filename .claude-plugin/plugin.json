@@ -1,5 +1,5 @@
 {
   "name": "claude-talk",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Let separate Claude sessions on this machine talk to each other through named channels."
 }
