@@ -141,7 +141,10 @@ switch (cmd) {
         const file = chFile(ch);
         if (!offsets.has(ch)) {
           const lines = readLines(file);
-          for (const l of lines.slice(-HISTORY)) { const f = fmt(ch, l); if (f) console.log(`(history) ${f}`); }
+          for (const l of lines.slice(-HISTORY)) {
+            try { if (JSON.parse(l).from === id) continue; } catch { continue; }
+            const f = fmt(ch, l); if (f) console.log(`(history) ${f}`);
+          }
           console.log(`listening on ${ch}`);
           offsets.set(ch, fs.existsSync(file) ? fs.statSync(file).size : 0);
           continue;
